@@ -20,8 +20,7 @@ public class Cooccurence {
 		else {
 			c = cooccurence_.get(word);
 		}
-			
-			return c;	
+		return c;	
 	}
 	
 	public Compte getCompte(String word){

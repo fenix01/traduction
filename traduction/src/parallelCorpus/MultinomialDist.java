@@ -47,9 +47,6 @@ public class MultinomialDist {
 		for (String dest_word : dest_words){
 			Compte acc = co.getCompte(dest_word);
 			if (!align_word.equals(dest_word)){
-				System.out.println("c:"+dest_word);
-				if (acc == null)
-					System.out.println("bouaahhhhhh");
 				acc.addWord(src_word);
 			}
 		}
@@ -61,10 +58,16 @@ public class MultinomialDist {
 		for ( int i = 0; i<dest_words.length ; i++){
 			
 			// nombre de mots sources différents alignées avec le mot destination
+			System.out.println(dest_words[i]);
 			int V = co.getCompte(dest_words[i]).getCompte_().size();
 			
 			int freq_src_dest = 0, freq_dest = 0;
-			freq_src_dest = co.getCompte(dest_words[i]).getCompte_().get(src_word);
+			
+			if (co.getCompte(dest_words[i]).getCompte_().containsKey(src_word)){
+				freq_src_dest = co.getCompte(dest_words[i]).getCompte_().get(src_word);
+			}
+			else freq_src_dest = 0;
+			
 			freq_dest = co.getCompte(dest_words[i]).getNcount();
 			
 			distribution[i] = (freq_src_dest+a) / (freq_dest+a*V);
@@ -72,8 +75,8 @@ public class MultinomialDist {
 	}
 	
 	public void compute() {
-		removeLink();
-		addLinks();
+//		removeLink();
+//		addLinks();
 		constructDist();
 		normalize();
 		int new_index = sample();
