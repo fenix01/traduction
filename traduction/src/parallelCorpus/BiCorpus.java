@@ -14,6 +14,23 @@ public class BiCorpus {
 	private ArrayList<Alignement> alignements;
 	private Cooccurence cooccurence;
 	
+	public void print(BiPhrase bp, Alignement al){
+		System.out.println("######################################");
+		for ( String src : bp.getArraysrc()){
+			System.out.print(src+" ");
+		}
+		System.out.println();
+		for ( int align : al.getAlign()){
+			System.out.print(align+" ");
+		}		
+		System.out.println();
+		for ( String dest : bp.getArraydest()){
+			System.out.print(dest+" ");
+		}	
+		System.out.println();
+		System.out.println("######################################");		
+	}
+	
 	public BiCorpus(String sourcefile, String destfile){
 		this.sourcefile = sourcefile;
 		this.destfile = destfile;

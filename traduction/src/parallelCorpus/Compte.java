@@ -32,6 +32,10 @@ public class Compte {
 		}
 	}
 	
+	public int getNcount() {
+		return ncount;
+	}
+
 	public void removeWord(String word){
 		if (compte_.containsKey(word)) {
 			int old = compte_.get(word);

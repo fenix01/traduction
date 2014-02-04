@@ -1,5 +1,7 @@
 package parallelCorpus;
 
+import java.util.Map;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -32,16 +34,19 @@ public class Main {
 				c.addWord(src_word);
 			}
 		}
+		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 10);
+		mtcorp.compute();
+		
 //		Compte the = bi.getCooccurence().getCompte("le");
 //		for (Map.Entry<String,Integer> el : the.getCompte_().entrySet()){
 //			System.out.println(el.getKey()+" : "+el.getValue());
 //		}
-		//		for (Alignement al : bi.getAlignements()){
-		//			for (int i=0;i<al.getAlign().length;i++){
-		//				System.out.print(al.getAlign()[i]+" ");;
-		//			}
-		//			System.out.println("");
-		//		}
+//				for (Alignement al : bi.getAlignements()){
+//					for (int i=0;i<al.getAlign().length;i++){
+//						System.out.print(al.getAlign()[i]+" ");;
+//					}
+//					System.out.println("");
+//				}
 
 	}
 
