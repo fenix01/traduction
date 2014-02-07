@@ -6,8 +6,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String src = "./train.en";
-		String dest = "./train.fr";
+		String src = "./train.fr";
+		String dest = "./train.en";
 
 		
 		
@@ -37,20 +37,18 @@ public class Main {
 				c.addWord(src_word);
 			}
 		}
-//		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 10);
-//		mtcorp.compute();
-		
-//		Compte the = bi.getCooccurence().getCompte("le");
+//		Compte the = bi.getCooccurence().getCompte("il");
 //		for (Map.Entry<String,Integer> el : the.getCompte_().entrySet()){
 //			System.out.println(el.getKey()+" : "+el.getValue());
 //		}
-//				for (Alignement al : bi.getAlignements()){
-//					for (int i=0;i<al.getAlign().length;i++){
-//						System.out.print(al.getAlign()[i]+" ");;
-//					}
-//					System.out.println("");
-//				}
-
+		
+		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 20);
+		mtcorp.compute();
+		
+		Compte the2 = bi.getCooccurence().getCompte("rehabilitation");
+		for (Map.Entry<String,Integer> el : the2.getCompte_().entrySet()){
+			System.out.println(el.getKey()+" : "+el.getValue());
+		}
 	}
 
 }

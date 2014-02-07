@@ -24,6 +24,6 @@ public class Cooccurence {
 	}
 	
 	public Compte getCompte(String word){
-		return cooccurence_.get(word);
+		return addCompte(word);
 	}
 }

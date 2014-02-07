@@ -58,7 +58,6 @@ public class MultinomialDist {
 		for ( int i = 0; i<dest_words.length ; i++){
 			
 			// nombre de mots sources différents alignées avec le mot destination
-			System.out.println(dest_words[i]);
 			int V = co.getCompte(dest_words[i]).getCompte_().size();
 			
 			int freq_src_dest = 0, freq_dest = 0;
@@ -75,12 +74,12 @@ public class MultinomialDist {
 	}
 	
 	public void compute() {
-//		removeLink();
-//		addLinks();
+		removeLink();
+		addLinks();
 		constructDist();
 		normalize();
 		int new_index = sample();
-		String dest_word = dest_words[new_index];
+		String dest_word = (new_index == -1) ? Cooccurence.NULL : dest_words[new_index];
 		Compte acc = co.getCompte(dest_word);
 		acc.addWord(src_word);
 	}

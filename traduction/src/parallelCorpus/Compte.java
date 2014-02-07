@@ -24,7 +24,7 @@ public class Compte {
 		if (compte_.containsKey(word)) {
 			int old = compte_.get(word);
 			compte_.put(word, old+1);
-			ncount += old+1;
+			ncount += 1;
 		}
 		else {
 			compte_.put(word, 1);
@@ -39,8 +39,9 @@ public class Compte {
 	public void removeWord(String word){
 		if (compte_.containsKey(word)) {
 			int old = compte_.get(word);
-			compte_.put(word, old-1);
-			ncount += old-1;
+			old = (old <= 1) ? 0 : old-1;
+			compte_.put(word, old);
+			ncount = (ncount <= 1) ? 0 : ncount-1;
 		}
 	}
 }

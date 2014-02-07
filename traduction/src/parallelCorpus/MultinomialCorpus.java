@@ -16,7 +16,6 @@ public class MultinomialCorpus {
 			BiPhrase bph = bp.getCorpus().get(i);
 			Alignement al = bp.getAlignements().get(i);
 			for ( int j = 0 ; j<bph.getArraysrc().length ; j++){
-				bp.print(bph, al);
 				MultinomialDist md = new MultinomialDist(bph.getArraysrc()[j], bph.getArraydest(), al.getAlign()[j] , bp.getCooccurence());
 				md.compute();
 			}
