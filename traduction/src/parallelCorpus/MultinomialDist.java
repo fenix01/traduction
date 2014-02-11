@@ -29,7 +29,8 @@ public class MultinomialDist {
 	
 	// effectue le tirage multinomial et renvoie l'indice correspondant
 	private int sample() {
-		double target = rd.nextDouble();
+		//double target = rd.nextDouble();
+		double target = Math.random();
 		double cumProb = 0;
 		for (int i = 0; i < distribution.length; i++) {
 			cumProb += distribution[i];
@@ -112,7 +113,7 @@ public class MultinomialDist {
 	//par rapport à la phrase cible
 	public void compute() {
 		removeLink();
-		addLinks();
+		//addLinks();
 		constructDist();
 		normalize();
 		//Arrays.sort(distribution);
@@ -124,7 +125,7 @@ public class MultinomialDist {
 		String dest_word = (new_index == -1) ? Cooccurence.NULL : bi
 				.getArraydest()[new_index];
 		al.getAlign()[src_idx] = new_index;
-		co.getCompte(dest_word).addWord(src_word);
+		co.getCompte(dest_word).addWord(src_word);	
 	}
 
 	// constructeur qui permet d'effectuer un tirage multinomial entre un mot

@@ -35,21 +35,9 @@ public class Compte {
 			ncount += 1;
 		} else {
 			compte_.put(word, 1);
-			ncount = 1;
+			ncount += 1;
 		}
 	}
-
-	// public void addWord(String word,int val){
-	// if (compte_.containsKey(word)) {
-	// int old = compte_.get(word);
-	// compte_.put(word, old+val);
-	// ncount += val;
-	// }
-	// else {
-	// compte_.put(word, val);
-	// ncount = val;
-	// }
-	// }
 
 	public int getNcount() {
 		return ncount;
@@ -67,18 +55,14 @@ public class Compte {
 	public void removeWord(String word) {
 		if (compte_.containsKey(word)) {
 			int old = compte_.get(word);
-			old = (old <= 1) ? 0 : old - 1;
-			compte_.put(word, old);
+			if (old == 1){
+				deleteWord(word);
+			}
+			else {
+				old = old - 1;
+				compte_.put(word, old);
+			}
 			ncount = (ncount <= 1) ? 0 : ncount - 1;
 		}
 	}
-
-	// public void removeWord(String word, int val){
-	// if (compte_.containsKey(word)) {
-	// int old = compte_.get(word);
-	// old = (old-val <= 0) ? 0 : old-val;
-	// compte_.put(word, old);
-	// ncount = (ncount-val <= 0) ? 0 : ncount-val;
-	// }
-	// }
 }
