@@ -19,8 +19,8 @@ public class EvalAlignement {
 				Alignement al = bi.getAlignements().get(i);
 				for (int j = 0; j < al.getAlign().length; j++) {
 					if (al.getAlign()[j] != -1) {
-						alignFile.write((i + 1) + " " + j + " "
-								+ al.getAlign()[j]);
+						alignFile.write((i + 1) + " " + (j+1) + " "
+								+ (al.getAlign()[j]+1));
 						alignFile.newLine();
 					}
 				}
