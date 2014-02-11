@@ -1,95 +1,145 @@
 package parallelCorpus;
 
+import java.util.Random;
+
 public class MultinomialDist {
-	
-	//petite constante pour la probabilité
-	private final double a = 0.01;
-	
+
+	// petite constante pour la probabilité
+	private final double a = 0.05;
+
 	private Cooccurence co;
+	private int src_idx;
 	private String src_word;
 	private String align_word;
-	private String[] dest_words;
+	private BiPhrase bi;
+	private Alignement al;
 	private double[] distribution;
+
+	private Random rd;
+
+	// affiche le tableau de probabilité
+	private void print() {
+		System.out.println("tableau de probas");
+		for (double prob : distribution) {
+			System.out.print(prob + " ");
+		}
+		System.out.println();
+	}
 	
-	private int sample(){
-		double alea = Math.random();	//un nombre aleatoire entre 0 et 1
-		double proba = 0;
-		for(int i = 0; i < distribution.length; i++){
-			proba += distribution[i];	//la somme des proba doit etre egale a 1
-			if(alea < proba){
+	
+	// effectue le tirage multinomial et renvoie l'indice correspondant
+	private int sample() {
+		double target = rd.nextDouble();
+		double cumProb = 0;
+		for (int i = 0; i < distribution.length; i++) {
+			cumProb += distribution[i];
+			if (target < cumProb) {
 				return i;
 			}
 		}
-		return -1;
+		return (distribution.length - 1); // this shouldn't ever be executed
 	}
-	
-	//permet de normaliser le tableau de probabilités pour que la somme soit égale à 1
-	private void normalize(){
+
+	// permet de normaliser le tableau de probabilités pour que la somme soit
+	// égale à 1
+	private void normalize() {
 		double sum = 0;
-		for (int i = 0; i<distribution.length; i++){
-			sum+=distribution[i];
+		for (int i = 0; i < distribution.length; i++) {
+			sum += distribution[i];
 		}
-		for (int i = 0; i<distribution.length; i++){
-			distribution[i] = distribution[i]/sum;
+		for (int i = 0; i < distribution.length; i++) {
+			distribution[i] = distribution[i] / sum;
 		}
 	}
-	
+
 	// retire le lien entre le mot source et le mot de destination.
 	// la fréquence du compte du mot aligné au mot source est décrémenté de 1
-	private void removeLink(){
+	private void removeLink() {
 		Compte acc = co.getCompte(align_word);
 		acc.removeWord(src_word);
 	}
-	
+
 	// ajoute un lien entre le mot source et les mots destinations
-	// la fréquence des comptes des mots destinations associés au mot source est incrémenté de 1
-	private void addLinks(){
-		for (String dest_word : dest_words){
+	// la fréquence des comptes des mots destinations associés au mot source est
+	// incrémenté de 1
+	private void addLinks() {
+		for (String dest_word : bi.getArraydest()) {
 			Compte acc = co.getCompte(dest_word);
-			if (!align_word.equals(dest_word)){
+			if (!align_word.equals(dest_word)) {
 				acc.addWord(src_word);
 			}
 		}
 	}
-	
-	//initialise le tableau de probabilités
-	private void constructDist(){
-		distribution = new double[dest_words.length+1];
-		for ( int i = 0; i<dest_words.length ; i++){
-			
-			// nombre de mots sources différents alignées avec le mot destination
-			int V = co.getCompte(dest_words[i]).getCompte_().size();
-			
-			int freq_src_dest = 0, freq_dest = 0;
-			
-			if (co.getCompte(dest_words[i]).getCompte_().containsKey(src_word)){
-				freq_src_dest = co.getCompte(dest_words[i]).getCompte_().get(src_word);
-			}
-			else freq_src_dest = 0;
-			
-			freq_dest = co.getCompte(dest_words[i]).getNcount();
-			
-			distribution[i] = (freq_src_dest+a) / (freq_dest+a*V);
+
+	// trie le tableau de probabilité par ordre décroissant
+	// nécessite d'avoir trier auparavant le tableau par ordre croissant
+	// NB: n'améliore pas du tout le résultat de l'AER
+	private void descendSort(double[] tab) {
+		for (int i = 0; i < tab.length / 2; i++) {
+			double temp = tab[i];
+			tab[i] = tab[tab.length - 1 - i];
+			tab[tab.length - 1 - i] = temp;
 		}
 	}
-	
+
+	// initialise le tableau de probabilités
+	private void constructDist() {
+		distribution = new double[bi.getArraydest().length];
+		for (int i = 0; i < bi.getArraydest().length; i++) {
+
+			// nombre de mots sources différents alignées avec le mot
+			// destination
+			int V = co.getCompte(bi.getArraydest()[i]).getCompte_().size();
+
+			int freq_src_dest = 0, freq_dest = 0;
+
+			// récupère la fréquence du mot cible aligné avec le mot source
+			if (co.getCompte(bi.getArraydest()[i]).getCompte_()
+					.containsKey(src_word)) {
+				freq_src_dest = co.getCompte(bi.getArraydest()[i]).getCompte_()
+						.get(src_word);
+			} else
+				freq_src_dest = 0;
+
+			// récupère la fréquence
+			freq_dest = co.getCompte(bi.getArraydest()[i]).getNcount();
+
+			distribution[i] = (freq_src_dest + a) / (freq_dest + a * V);
+		}
+	}
+
+	//méthode à appeler pour effectuer le tirage multinomial sur le mot source
+	//par rapport à la phrase cible
 	public void compute() {
 		removeLink();
 		addLinks();
 		constructDist();
 		normalize();
+		//Arrays.sort(distribution);
+		// descendSort(distribution);
 		int new_index = sample();
-		String dest_word = (new_index == -1) ? Cooccurence.NULL : dest_words[new_index];
-		Compte acc = co.getCompte(dest_word);
-		acc.addWord(src_word);
+		
+		//modifie le lien d'alignement suite au tirage et incrémente la fréquence d'alignement avec
+		//le nouveau mot cible
+		String dest_word = (new_index == -1) ? Cooccurence.NULL : bi
+				.getArraydest()[new_index];
+		al.getAlign()[src_idx] = new_index;
+		co.getCompte(dest_word).addWord(src_word);
 	}
-	
-	//constructeur qui permet d'effectuer un tirage multinomial entre un mot source et une liste de mots cible
-	public MultinomialDist(String src_word,String[] dest_words,int alignement,Cooccurence co){
+
+	// constructeur qui permet d'effectuer un tirage multinomial entre un mot
+	// source et une liste de mots cible
+	public MultinomialDist(int src_idx, BiPhrase bi, Alignement al,
+			Cooccurence co) {
+		this.rd = new Random(System.currentTimeMillis());
 		this.co = co;
-		this.src_word = src_word;
-		this.dest_words = dest_words;
-		this.align_word = (alignement == -1) ? Cooccurence.NULL: dest_words[alignement];
+		this.src_idx = src_idx;
+		this.src_word = bi.getArraysrc()[src_idx];
+		this.bi = bi;
+		this.al = al;
+		int alignement = al.getAlign()[src_idx];
+		this.align_word = (alignement == -1) ? Cooccurence.NULL : bi
+				.getArraydest()[alignement];
 	}
 
 }

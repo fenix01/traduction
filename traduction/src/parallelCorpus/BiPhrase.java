@@ -14,10 +14,10 @@ public class BiPhrase {
 	}
 
 	public BiPhrase(String src, String dest){
-		String src2 = src.replaceAll("[0-9,$!.]", "");
-		String dest2 = dest.replaceAll("[0-9,$!.]", "");
-		arraysrc = src2.split(" ");
-		arraydest = dest2.split(" ");
+		//String src2 = src.replaceAll("[0-9,$!.]", "");
+		//String dest2 = dest.replaceAll("[0-9,$!.]", "");
+		arraysrc = src.split(" ");
+		arraydest = dest.split(" ");
 	}
 	
 

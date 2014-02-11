@@ -7,13 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class BiCorpus {
-	private String sourcefile;
-	private String destfile;
+	private String sourcefile;//nom du fichier source
+	private String destfile;//nom du fichier cible
 	
 	private ArrayList<BiPhrase> corpus;
 	private ArrayList<Alignement> alignements;
 	private Cooccurence cooccurence;
 	
+	//permet d'afficher une Biphrase et le tableau d'alignement
 	public void print(BiPhrase bp, Alignement al){
 		System.out.println("######################################");
 		for ( String src : bp.getArraysrc()){
@@ -46,7 +47,8 @@ public class BiCorpus {
 	public ArrayList<BiPhrase> getCorpus() {
 		return corpus;
 	}
-
+	
+	//parcours le corpus et remplit les structures de données correspondantes
 	public void parseFile(){
 		BufferedReader rdsource;
 		BufferedReader rddest;
