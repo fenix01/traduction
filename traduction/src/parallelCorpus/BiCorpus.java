@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.GroupLayout.Alignment;
+
 public class BiCorpus {
 	private String sourcefile;//nom du fichier source
 	private String destfile;//nom du fichier cible
@@ -13,6 +15,39 @@ public class BiCorpus {
 	private ArrayList<BiPhrase> corpus;
 	private ArrayList<Alignement> alignements;
 	private Cooccurence cooccurence;
+	
+	//permet de remettre à zéro le BiCorpus
+	//mais conserve les BiPhrases
+	public void reset(){
+		//nettoie la structure cooccurence
+		cooccurence.reset();
+		//conserve la structure alignements mais effectue un tirage aléatoire dessus
+		for (Alignement al : alignements){
+			al.randomAlignment();
+		}
+	}
+	
+	//fonction permettant de remplir cooccurrence
+	//un appel à parseFile est nécessaire avant tout appel
+	public void fillCooccurence(){
+		for (int i = 0; i < corpus.size(); i++) {
+			BiPhrase bp = corpus.get(i);
+
+			for (int j = 0; j < alignements.get(i).getAlign().length; j++) {
+
+				String src_word = bp.getArraysrc()[j];
+				String dest_word = Cooccurence.NULL;
+
+				int dest_idx = alignements.get(i).getAlign()[j];
+				if (dest_idx > -1) {
+					dest_word = bp.getArraydest()[dest_idx];
+				}
+				Compte c = cooccurence.addCompte(dest_word);
+				c.addWord(src_word);
+			}
+		}
+	}
+	
 	
 	//permet d'afficher une Biphrase et le tableau d'alignement
 	public void print(BiPhrase bp, Alignement al){
@@ -42,6 +77,10 @@ public class BiCorpus {
 	
 	public ArrayList<Alignement> getAlignements() {
 		return alignements;
+	}
+	
+	public void setAlignements(ArrayList<Alignement> al) {
+		alignements = al;
 	}
 
 	public ArrayList<BiPhrase> getCorpus() {

@@ -15,7 +15,8 @@ public class MultinomialDist {
 	private Alignement al;
 	private double[] distribution;
 
-	private Random rd;
+	//On n'utilise plus la classe Random, Math.random est suffisant
+	//private Random rd;
 
 	// affiche le tableau de probabilité
 	private void print() {
@@ -132,7 +133,7 @@ public class MultinomialDist {
 	// source et une liste de mots cible
 	public MultinomialDist(int src_idx, BiPhrase bi, Alignement al,
 			Cooccurence co) {
-		this.rd = new Random(System.currentTimeMillis());
+//		this.rd = new Random(System.currentTimeMillis());
 		this.co = co;
 		this.src_idx = src_idx;
 		this.src_word = bi.getArraysrc()[src_idx];
