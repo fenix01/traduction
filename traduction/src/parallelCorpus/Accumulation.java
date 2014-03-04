@@ -44,23 +44,23 @@ public class Accumulation {
 	}
 
 	private void maximizeFrequencies() {
-		ArrayList<Alignement> burnedAlign = new ArrayList<>();
+		ArrayList<Alignement> optimalAlign = new ArrayList<>();
 		// parcours tous les alignements
 		for (int i = 0; i < acc.get(0).size(); i++) {
 			// alignement courant
 			Alignement al = acc.get(0).get(i);
 
 			// alignement br�l�
-			Alignement burnedAl = new Alignement(al.getAlign().length,
-					al.getCible());
-			burnedAlign.add(burnedAl);
+			Alignement optimalAl = new Alignement(al.getAlign().length,
+					al.getLengthCibl());
+			optimalAlign.add(optimalAl);
 
 			// parcours tous les mots sources de l'alignement courant
 			for (int j = 0; j < al.getAlign().length; j++) {
 				// les indices repr�sentent les mots cibles
 				// la valeur sera repr�sent�e par la fr�quence d'apparition
 				// la derni�re case du tableau correspond au mot nul -1
-				int[] compte = new int[al.getCible() + 1];
+				int[] compte = new int[al.getLengthCibl() + 1];
 				// parcours l'ensemble des structures d'alignements pour
 				// l'alignement correspondant
 				// au mot source correspondant.
@@ -69,22 +69,22 @@ public class Accumulation {
 				for (ArrayList<Alignement> struct_align : acc) {
 					int cibl = struct_align.get(i).getAlign()[j];
 					if (cibl == -1)
-						compte[al.getCible()] += 1;
+						compte[al.getLengthCibl()] += 1;
 					else
 						compte[cibl] += 1;
 				}
 				// on r�cup�re la valeur max du tableau
 				// = le mot cible le plus fr�quent avec le mot source
 				int cibl = findMax(compte);
-				if (cibl == al.getCible())
-					burnedAl.getAlign()[j] = -1;
+				if (cibl == al.getLengthCibl())
+					optimalAl.getAlign()[j] = -1;
 				else
-					burnedAl.getAlign()[j] = cibl;
+					optimalAl.getAlign()[j] = cibl;
 			}
 		}
-		if (burnedAlign.size() == acc.get(0).size())
+		if (optimalAlign.size() == acc.get(0).size())
 			System.out.println("ok");
-		EvalAlignement eval2 = new EvalAlignement(burnedAlign, "./my_alignments.txt");
+		EvalAlignement eval2 = new EvalAlignement(optimalAlign, "./my_alignments.txt");
 	}
 	
 	public void compute(){
