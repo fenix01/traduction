@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class MultinomialDist {
 
-	// petite constante pour la probabilit�
+	// petite constante pour la probabilité
 	private final double a = 0.05;
 
 	private Cooccurence co;
@@ -18,7 +18,7 @@ public class MultinomialDist {
 	//On n'utilise plus la classe Random, Math.random est suffisant
 	//private Random rd;
 
-	// affiche le tableau de probabilit�
+	// affiche le tableau de probabilité
 	private void print() {
 		System.out.println("tableau de probas");
 		for (double prob : distribution) {
@@ -42,60 +42,51 @@ public class MultinomialDist {
 		return (distribution.length - 1); // this shouldn't ever be executed
 	}
 
-	// permet de normaliser le tableau de probabilit�s pour que la somme soit
-	// �gale � 1
+	// permet de normaliser le tableau de probabilités pour que la somme soit
+	// égale é 1
 	private void normalize() {
 		double sum = 0;
 		for (int i = 0; i < distribution.length; i++) {
 			sum += distribution[i];
 		}
+		//System.out.println("======================");
 		for (int i = 0; i < distribution.length; i++) {
 			distribution[i] = distribution[i] / sum;
+			//System.out.print(distribution[i]+" ");
 		}
 	}
 
-//	// retire le lien entre le mot source et le mot de destination.
-//	// la fr�quence du compte du mot align� au mot source est d�cr�ment� de 1
-//	private void removeLink() {
-//		Compte acc = co.getCompte(align_word);
-//		acc.removeWord(src_word);
-//	}
-
-	// ajoute un lien entre le mot source et les mots destinations
-	// la fr�quence des comptes des mots destinations associ�s au mot source est
-	// incr�ment� de 1
-	private void addLinks() {
-		for (String dest_word : bi.getArraydest()) {
-			Compte acc = co.getCompte(dest_word);
-			if (!align_word.equals(dest_word)) {
-				acc.addWord(src_word);
-			}
-		}
+	// retire le lien entre le mot source et le mot de destination.
+	// le compte est retiré
+	private void removeLink() {
+		Compte acc = co.getCompte(align_word);
+		acc.removeWord(src_word);
 	}
 
-//	// trie le tableau de probabilit� par ordre d�croissant
-//	// n�cessite d'avoir trier auparavant le tableau par ordre croissant
-//	// NB: n'am�liore pas du tout le r�sultat de l'AER
-//	private void descendSort(double[] tab) {
-//		for (int i = 0; i < tab.length / 2; i++) {
-//			double temp = tab[i];
-//			tab[i] = tab[tab.length - 1 - i];
-//			tab[tab.length - 1 - i] = temp;
+//	// ajoute un lien entre le mot source et les mots destinations
+//	// la fréquence des comptes des mots destinations associés au mot source est
+//	// incrémenté de 1
+//	private void addLinks() {
+//		for (String dest_word : bi.getArraydest()) {
+//			Compte acc = co.getCompte(dest_word);
+//			if (!align_word.equals(dest_word)) {
+//				acc.addWord(src_word);
+//			}
 //		}
 //	}
-
-	// initialise le tableau de probabilit�s
+	
+	// initialise le tableau de probabilités
 	private void constructDist() {
 		distribution = new double[bi.getArraydest().length];
 		for (int i = 0; i < bi.getArraydest().length; i++) {
 
-			// nombre de mots sources diff�rents align�es avec le mot
+			// nombre de mots sources différents alignées avec le mot
 			// destination
 			int V = co.getCompte(bi.getArraydest()[i]).getCompte_().size();
 
 			int freq_src_dest = 0, freq_dest = 0;
 
-			// r�cup�re la fr�quence du mot cible align� avec le mot source
+			// récupére la fréquence du mot cible aligné avec le mot source
 			if (co.getCompte(bi.getArraydest()[i]).getCompte_()
 					.containsKey(src_word)) {
 				freq_src_dest = co.getCompte(bi.getArraydest()[i]).getCompte_()
@@ -103,25 +94,27 @@ public class MultinomialDist {
 			} else
 				freq_src_dest = 0;
 
-			// r�cup�re la fr�quence
+			// récupére la fréquence
 			freq_dest = co.getCompte(bi.getArraydest()[i]).getNcount();
-			
-			distribution[i] = (freq_src_dest + a) / (freq_dest + a * V);
+			if (a*V == 0 && freq_dest == 0)
+				distribution[i] = 1;
+			else
+				distribution[i] = (freq_src_dest + a) / (freq_dest + a * V);
 			
 		}
 	}
 
-	//m�thode � appeler pour effectuer le tirage multinomial sur le mot source
-	//par rapport � la phrase cible
+	//méthode é appeler pour effectuer le tirage multinomial sur le mot source
+	//par rapport é la phrase cible
 	public void compute() {
-		//removeLink();
-		addLinks();
+		removeLink();
+		//addLinks();
 		constructDist();
 		normalize();
 		//Arrays.sort(distribution);
 		// descendSort(distribution);
 		int new_index = sample();
-		//modifie le lien d'alignement suite au tirage et incr�mente la fr�quence d'alignement avec
+		//modifie le lien d'alignement suite au tirage et incrémente la fréquence d'alignement avec
 		//le nouveau mot cible
 		String dest_word = (new_index == -1) ? Cooccurence.NULL : bi
 				.getArraydest()[new_index];

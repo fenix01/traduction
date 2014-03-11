@@ -3,7 +3,8 @@ package parallelCorpus;
 import java.util.Random;
 
 public class Alignement implements Cloneable {
-
+	
+	private static Random rd = new Random();
 	private int lengthCibl;
 	private int[] align;// r�pr�sente le tableau d'alignement. En indice est
 						// repr�sent� les mots sources et en valeur le lien
@@ -14,6 +15,7 @@ public class Alignement implements Cloneable {
 	Alignement(String[] src, String[] dest) {
 		this.align = new int[src.length];
 		this.lengthCibl = dest.length;
+		randomAlignment();
 	}
 	
 	// Constructeur qui prend la taille de la source et de la cible en entr�e
@@ -32,9 +34,8 @@ public class Alignement implements Cloneable {
 	
 	//effectue un tirage al�atoire sur le tableau d'alignement
 	public void randomAlignment(){
-		Random rd = new Random();
 		for (int i = 0; i < align.length; i++) {
-			int x = rd.nextInt(lengthCibl) - 1;
+			int x = rd.nextInt(lengthCibl + 1) - 1;
 			align[i] = x;
 		}
 	}

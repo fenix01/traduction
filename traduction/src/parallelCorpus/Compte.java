@@ -3,8 +3,8 @@ package parallelCorpus;
 import java.util.HashMap;
 
 public class Compte {
-	private int ncount = 0; // ncount représente la fréquence totale d'un mot
-							// cible par rapports à tous les mots sources du
+	private int ncount = 0; // ncount reprï¿½sente la frï¿½quence totale d'un mot
+							// cible par rapports ï¿½ tous les mots sources du
 							// compte
 	private HashMap<String, Integer> compte_;
 
@@ -16,7 +16,7 @@ public class Compte {
 		compte_ = new HashMap<String, Integer>();
 	}
 
-	// permet de mettre à jour un mot source sans l'ajouter dans les comptes
+	// permet de mettre ï¿½ jour un mot source sans l'ajouter dans les comptes
 	// s'il n'existe pas
 	public void updateWord(String word) {
 		if (compte_.containsKey(word)) {
@@ -26,8 +26,8 @@ public class Compte {
 		}
 	}
 
-	// ajoute un mot source dans les comptes et s'il existe déjà le met à jour
-	// en incrémentant sa fréquence
+	// ajoute un mot source dans les comptes et s'il existe dï¿½jï¿½ le met ï¿½ jour
+	// en incrï¿½mentant sa frï¿½quence
 	public void addWord(String word) {
 		if (compte_.containsKey(word)) {
 			int old = compte_.get(word);
@@ -43,26 +43,18 @@ public class Compte {
 		return ncount;
 	}
 
-	// supprime complètement un mot source des comptes
-	public void deleteWord(String word) {
-		if (compte_.containsKey(word)) {
-			compte_.remove(word);
-		}
-	}
-
 	// retire un mot source des comptes.
-	// Si le mot source existe décrémente sa fréquence de 1
+	// Si le mot source existe dÃ©crÃ©mente sa frÃ©quence de 1
 	public void removeWord(String word) {
-		if (compte_.containsKey(word)) {
-			int old = compte_.get(word);
-			if (old == 1){
-				deleteWord(word);
-			}
-			else {
-				old = old - 1;
-				compte_.put(word, old);
-			}
-			ncount = (ncount <= 1) ? 0 : ncount - 1;
+		int cpt;
+		assert(compte_.containsKey(word));
+		cpt = compte_.get(word)-1;
+		if (cpt == 0){
+			compte_.remove(word);
+		} else 
+			compte_.put(word,cpt);
+			
+		ncount = ncount --;
+		ncount = (ncount<0) ? 0 : ncount;
 		}
-	}
 }

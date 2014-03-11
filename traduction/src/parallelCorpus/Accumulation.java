@@ -18,7 +18,7 @@ public class Accumulation {
 
 	private void copyAlignements() {
 		// g�n�re 10 tirages multinomiaux sur le corpus
-		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 5);
+		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 10);
 		mtcorp.compute();
 		ArrayList<Alignement> copy = new ArrayList<Alignement>();
 		for (Alignement al : bi.getAlignements()) {
@@ -84,7 +84,7 @@ public class Accumulation {
 		}
 		if (optimalAlign.size() == acc.get(0).size())
 			System.out.println("ok");
-		EvalAlignement eval2 = new EvalAlignement(optimalAlign, "./my_alignments.txt");
+		EvalAlignement eval2 = new EvalAlignement(optimalAlign, "./my_alignments2.txt");
 	}
 	
 	public void compute(){

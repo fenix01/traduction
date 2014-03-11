@@ -9,9 +9,14 @@ public class Main {
 
 		BiCorpus bi = new BiCorpus(src, dest);
 		bi.parseFile();
+//		Accumulation acc = new Accumulation(bi,10,20);
+//		acc.compute();
 		
-		Accumulation acc = new Accumulation(bi, 1,10);
-		acc.compute();
+		bi.fillCooccurence();
+		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 20);
+		mtcorp.compute();
+		new EvalAlignement(bi.getAlignements(), "./my_alignments2.txt");
+		
 	}
 
 }
