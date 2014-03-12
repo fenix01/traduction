@@ -18,7 +18,7 @@ public class Accumulation {
 
 	private void copyAlignements() {
 		// g�n�re 10 tirages multinomiaux sur le corpus
-		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 10);
+		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 5);
 		mtcorp.compute();
 		ArrayList<Alignement> copy = new ArrayList<Alignement>();
 		for (Alignement al : bi.getAlignements()) {
@@ -41,6 +41,24 @@ public class Accumulation {
 			}
 		}
 		return indexOfMax;
+	}
+	
+	private void print(){
+		for (int i = 0; i < acc.get(0).size(); i++) {
+			// alignement courant
+			Alignement al = acc.get(0).get(i);
+			System.out.println("---------------------------------------");
+			al.print();
+			for (int j = 1; j < acc.size();j++){
+				Alignement al2 = acc.get(j).get(i);
+				if (al == al2) 
+				{
+					System.out.println("error");
+					System.exit(11);
+				}
+				al2.print();
+			}
+		}
 	}
 
 	private void maximizeFrequencies() {
@@ -90,6 +108,7 @@ public class Accumulation {
 	public void compute(){
 		burnIn();
 		accAlignments();
+		//print();
 		maximizeFrequencies();
 	}
 

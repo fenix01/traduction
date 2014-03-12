@@ -23,6 +23,12 @@ public class Alignement implements Cloneable {
 		this.align = new int[src];
 		this.lengthCibl = dest;
 	}	
+	
+	public void print(){
+		for (int al : align){
+			System.out.print(al+" ");
+		}
+	}
 
 	public int[] getAlign() {
 		return align;
@@ -40,8 +46,11 @@ public class Alignement implements Cloneable {
 		}
 	}
 	
-	public Object clone() throws CloneNotSupportedException {
-		 return super.clone();
+	public Alignement clone() throws CloneNotSupportedException {
+		Alignement copy = (Alignement) super.clone();
+		copy.align = new int[align.length];
+		System.arraycopy(align, 0, copy.align, 0 , align.length);
+		return copy;
 		 }
 
 }

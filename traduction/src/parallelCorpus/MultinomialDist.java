@@ -5,7 +5,7 @@ import java.util.Random;
 public class MultinomialDist {
 
 	// petite constante pour la probabilité
-	private final double a = 0.05;
+	private final double a = 0.1;
 
 	private Cooccurence co;
 	private int src_idx;
