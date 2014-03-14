@@ -12,27 +12,22 @@ public class Accumulation {
 	// permet d'accumuler x structures d'alignements
 	private void accAlignments() {
 		for (int i = 0; i < accu; i++) {
-			copyAlignements();
-		}
-	}
-
-	private void copyAlignements() {
-		// g�n�re 10 tirages multinomiaux sur le corpus
-		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 5);
-		mtcorp.compute();
-		ArrayList<Alignement> copy = new ArrayList<Alignement>();
-		for (Alignement al : bi.getAlignements()) {
-			try {
-				copy.add((Alignement) al.clone());
-			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 2);
+			mtcorp.compute();
+			ArrayList<Alignement> copy = new ArrayList<Alignement>();
+			for (Alignement al : bi.getAlignements()) {
+				try {
+					copy.add((Alignement) al.clone());
+				} catch (CloneNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			acc.add(copy);
 		}
-		acc.add(copy);
 	}
 
-	// max d'une array
+	// max d'un tableau
 	private static int findMax(int[] array) {
 		int indexOfMax = 0;
 		for (int i = 1; i < array.length; i++) {
@@ -42,17 +37,16 @@ public class Accumulation {
 		}
 		return indexOfMax;
 	}
-	
-	private void print(){
+
+	private void print() {
 		for (int i = 0; i < acc.get(0).size(); i++) {
 			// alignement courant
 			Alignement al = acc.get(0).get(i);
 			System.out.println("---------------------------------------");
 			al.print();
-			for (int j = 1; j < acc.size();j++){
+			for (int j = 1; j < acc.size(); j++) {
 				Alignement al2 = acc.get(j).get(i);
-				if (al == al2) 
-				{
+				if (al == al2) {
 					System.out.println("error");
 					System.exit(11);
 				}
@@ -61,6 +55,8 @@ public class Accumulation {
 		}
 	}
 
+	// accumule les structures d'alignement et cherche les liens d'alignement
+	// les plus fréquents pour les stocker dans une nouvelle structure
 	private void maximizeFrequencies() {
 		ArrayList<Alignement> optimalAlign = new ArrayList<>();
 		// parcours tous les alignements
@@ -75,14 +71,14 @@ public class Accumulation {
 
 			// parcours tous les mots sources de l'alignement courant
 			for (int j = 0; j < al.getAlign().length; j++) {
-				// les indices repr�sentent les mots cibles
-				// la valeur sera repr�sent�e par la fr�quence d'apparition
-				// la derni�re case du tableau correspond au mot nul -1
+				// les indices représentent les mots cibles
+				// la valeur sera représentée par la fréquence d'apparition
+				// la dernière case du tableau correspond au mot nul -1
 				int[] compte = new int[al.getLengthCibl() + 1];
 				// parcours l'ensemble des structures d'alignements pour
 				// l'alignement correspondant
 				// au mot source correspondant.
-				// Permet de r�cup�rer tous les mots cibles auquels sont align�s
+				// Permet de récupérer tous les mots cibles auquels sont alignés
 				// le mot source
 				for (ArrayList<Alignement> struct_align : acc) {
 					int cibl = struct_align.get(i).getAlign()[j];
@@ -91,8 +87,8 @@ public class Accumulation {
 					else
 						compte[cibl] += 1;
 				}
-				// on r�cup�re la valeur max du tableau
-				// = le mot cible le plus fr�quent avec le mot source
+				// on récupère la valeur max du tableau
+				// = le mot cible le plus fréquent avec le mot source
 				int cibl = findMax(compte);
 				if (cibl == al.getLengthCibl())
 					optimalAl.getAlign()[j] = -1;
@@ -102,13 +98,13 @@ public class Accumulation {
 		}
 		if (optimalAlign.size() == acc.get(0).size())
 			System.out.println("ok");
-		EvalAlignement eval2 = new EvalAlignement(optimalAlign, "./my_alignments2.txt");
+		EvalAlignement eval2 = new EvalAlignement(optimalAlign,
+				"./my_alignments2.txt");
 	}
-	
-	public void compute(){
+
+	public void compute() {
 		burnIn();
 		accAlignments();
-		//print();
 		maximizeFrequencies();
 	}
 
@@ -129,8 +125,8 @@ public class Accumulation {
 		acc.add(copy);
 	}
 
-	// constructeur qui prend en entr�e un bicorpus et le nombre d'accumulation
-	// � effectuer
+	// constructeur qui prend en entrée un bicorpus et le nombre d'accumulation
+	// à effectuer
 	Accumulation(BiCorpus bi, int accu, int multinomial) {
 		this.bi = bi;
 		this.accu = accu;

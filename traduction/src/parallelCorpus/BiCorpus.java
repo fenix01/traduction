@@ -16,19 +16,19 @@ public class BiCorpus {
 	private ArrayList<Alignement> alignements;
 	private Cooccurence cooccurence;
 	
-	//permet de remettre � z�ro le BiCorpus
+	//permet de remettre à zéro le BiCorpus
 	//mais conserve les BiPhrases
 	public void reset(){
 		//nettoie la structure cooccurence
 		cooccurence.reset();
-		//conserve la structure alignements mais effectue un tirage al�atoire dessus
+		//conserve la structure alignements mais effectue un tirage aléatoire dessus
 		for (Alignement al : alignements){
 			al.randomAlignment();
 		}
 	}
 	
 	//fonction permettant de remplir cooccurrence
-	//un appel � parseFile est n�cessaire avant tout appel
+	//un appel à parseFile est nécessaire avant tout appel
 	public void fillCooccurence(){
 		for (int i = 0; i < corpus.size(); i++) {
 			BiPhrase bp = corpus.get(i);
@@ -87,7 +87,7 @@ public class BiCorpus {
 		return corpus;
 	}
 	
-	//parcours le corpus et remplit les structures de donn�es correspondantes
+	//parcours le corpus et remplit les structures de données correspondantes
 	public void parseFile(){
 		BufferedReader rdsource;
 		BufferedReader rddest;
@@ -106,10 +106,10 @@ public class BiCorpus {
 			rddest = new BufferedReader(new FileReader(destfile));
 			
 			if (countsource == countdest){
-				//on ins�re les donn�es dans des arrayslists distincts
+				//on insère les données dans des arrayslists distincts
 				String srcline,destline = "";
 				int cpt =0;
-				while ((srcline = rdsource.readLine()) != null && (destline = rddest.readLine()) != null){
+				while ((srcline = rdsource.readLine()) != null && (destline = rddest.readLine()) != null && cpt < 447){
 					BiPhrase bp = new BiPhrase(srcline.toLowerCase(),destline.toLowerCase());
 					Alignement al = new Alignement(bp.getArraysrc(), bp.getArraydest());
 					corpus.add(bp);
