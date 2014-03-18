@@ -12,7 +12,7 @@ public class Accumulation {
 	// permet d'accumuler x structures d'alignements
 	private void accAlignments() {
 		for (int i = 0; i < accu; i++) {
-			MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 2);
+			MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 1);
 			mtcorp.compute();
 			ArrayList<Alignement> copy = new ArrayList<Alignement>();
 			for (Alignement al : bi.getAlignements()) {
@@ -104,6 +104,8 @@ public class Accumulation {
 
 	public void compute() {
 		burnIn();
+//		EvalAlignement eval2 = new EvalAlignement(bi.getAlignements(),
+//				"./my_alignments2.txt");
 		accAlignments();
 		maximizeFrequencies();
 	}
