@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.GroupLayout.Alignment;
-
 public class BiCorpus {
 	private String sourcefile;//nom du fichier source
 	private String destfile;//nom du fichier cible
@@ -109,7 +107,7 @@ public class BiCorpus {
 				//on insère les données dans des arrayslists distincts
 				String srcline,destline = "";
 				int cpt =0;
-				while ((srcline = rdsource.readLine()) != null && (destline = rddest.readLine()) != null){
+				while ((srcline = rdsource.readLine()) != null && (destline = rddest.readLine()) != null && cpt < 447){
 					BiPhrase bp = new BiPhrase(srcline.toLowerCase(),destline.toLowerCase());
 					Alignement al = new Alignement(bp.getArraysrc(), bp.getArraydest());
 					corpus.add(bp);

@@ -8,6 +8,11 @@ public class Accumulation {
 	private int accu;
 	private int multinomial;
 	private ArrayList<ArrayList<Alignement>> acc;
+	private ArrayList<Alignement> accAlignments;
+
+	public ArrayList<Alignement> getAccAlignments() {
+		return accAlignments;
+	}
 
 	// permet d'accumuler x structures d'alignements
 	private void accAlignments() {
@@ -98,14 +103,11 @@ public class Accumulation {
 		}
 		if (optimalAlign.size() == acc.get(0).size())
 			System.out.println("ok");
-		EvalAlignement eval2 = new EvalAlignement(optimalAlign,
-				"./my_alignments2.txt");
+		accAlignments = optimalAlign;
 	}
 
 	public void compute() {
 		burnIn();
-//		EvalAlignement eval2 = new EvalAlignement(bi.getAlignements(),
-//				"./my_alignments2.txt");
 		accAlignments();
 		maximizeFrequencies();
 	}
