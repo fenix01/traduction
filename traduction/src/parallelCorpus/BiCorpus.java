@@ -107,7 +107,7 @@ public class BiCorpus {
 				//on insère les données dans des arrayslists distincts
 				String srcline,destline = "";
 				int cpt =0;
-				while ((srcline = rdsource.readLine()) != null && (destline = rddest.readLine()) != null && cpt < 447){
+				while ((srcline = rdsource.readLine()) != null && (destline = rddest.readLine()) != null){
 					BiPhrase bp = new BiPhrase(srcline.toLowerCase(),destline.toLowerCase());
 					Alignement al = new Alignement(bp.getArraysrc(), bp.getArraydest());
 					corpus.add(bp);
