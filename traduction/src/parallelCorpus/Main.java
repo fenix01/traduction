@@ -16,8 +16,8 @@ public class Main {
 		bi_fr_en.parseFile();
 		bi_en_fr.parseFile();
 		long start = System.currentTimeMillis();
-		Accumulation acc_fr_en = new Accumulation(bi_fr_en,200,50);
-		Accumulation acc_en_fr = new Accumulation(bi_en_fr,200,50);
+		Accumulation acc_fr_en = new Accumulation(bi_fr_en,50,50);
+		Accumulation acc_en_fr = new Accumulation(bi_en_fr,50,50);
 		acc_fr_en.compute();
 		acc_en_fr.compute();
 		Symmetrize sym= new Symmetrize(acc_fr_en.getAccAlignments(), acc_en_fr.getAccAlignments());
