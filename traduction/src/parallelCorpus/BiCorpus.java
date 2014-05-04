@@ -13,6 +13,7 @@ public class BiCorpus {
 	private ArrayList<BiPhrase> corpus;
 	private ArrayList<Alignement> alignements;
 	private Cooccurence cooccurence;
+	private int lines;
 	
 	//permet de remettre à zéro le BiCorpus
 	//mais conserve les BiPhrases
@@ -65,7 +66,8 @@ public class BiCorpus {
 		System.out.println("######################################");		
 	}
 	
-	public BiCorpus(String sourcefile, String destfile){
+	public BiCorpus(String sourcefile, String destfile, int lines){
+		this.lines = lines;
 		this.sourcefile = sourcefile;
 		this.destfile = destfile;
 		this.corpus = new ArrayList<BiPhrase>();
@@ -107,7 +109,7 @@ public class BiCorpus {
 				//on insère les données dans des arrayslists distincts
 				String srcline,destline = "";
 				int cpt =0;
-				while ((srcline = rdsource.readLine()) != null && (destline = rddest.readLine()) != null && cpt<447){
+				while ((srcline = rdsource.readLine()) != null && (destline = rddest.readLine()) != null && cpt < lines){
 					BiPhrase bp = new BiPhrase(srcline.toLowerCase(),destline.toLowerCase());
 					Alignement al = new Alignement(bp.getArraysrc(), bp.getArraydest());
 					corpus.add(bp);

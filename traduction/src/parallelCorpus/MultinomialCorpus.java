@@ -4,6 +4,7 @@ public class MultinomialCorpus {
 
 	private BiCorpus bp;
 	private int computetime;
+	private boolean ibm2;
 
 	// méthode à appeler pour effectuer les tirages multinomiaux sur le corpus
 	public void compute() {
@@ -21,8 +22,8 @@ public class MultinomialCorpus {
 			BiPhrase bph = bp.getCorpus().get(i);
 			Alignement al = bp.getAlignements().get(i);
 			for (int j = 0; j < bph.getArraysrc().length; j++) {
-				MultinomialDist md = new MultinomialDist(j, bph, al,
-						bp.getCooccurence());
+				MultinomialDist md = new MultinomialDist(j, bph.getArraysrc(), bph.getArraydest(), al,
+						bp.getCooccurence(),ibm2);
 				md.compute();
 			}
 		}
@@ -30,7 +31,8 @@ public class MultinomialCorpus {
 
 	// constructeur qui prend en paramètre un BiCorpus et le nombre de tirage
 	// multinomial à effectuer sur le corpus
-	public MultinomialCorpus(BiCorpus bp, int computetime) {
+	public MultinomialCorpus(BiCorpus bp, int computetime, boolean ibm2) {
+		this.ibm2 = ibm2;
 		this.bp = bp;
 		this.computetime = computetime;
 	}

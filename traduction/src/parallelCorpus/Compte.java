@@ -55,12 +55,13 @@ public class Compte {
 	// Si le mot source existe décrémente sa fréquence de 1
 	public void removeWord(String word) {
 		int cpt;
-		cpt = compte_.get(word) - 1;
-		if (cpt == 0) {
-			compte_.remove(word);
-		} else
-			compte_.put(word, cpt);
-
+		if (compte_.containsKey(word)){
+			cpt = compte_.get(word) - 1;
+			if (cpt == 0) {
+				compte_.remove(word);
+			} else
+				compte_.put(word, cpt);
+		}
 		ncount = ncount--;
 		ncount = (ncount < 0) ? 0 : ncount;
 	}

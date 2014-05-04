@@ -9,7 +9,8 @@ public class Accumulation {
 	private int multinomial;
 	private ArrayList<ArrayList<Alignement>> acc;
 	private ArrayList<Alignement> accAlignments;
-
+	private boolean ibm2;
+	
 	public ArrayList<Alignement> getAccAlignments() {
 		return accAlignments;
 	}
@@ -17,7 +18,11 @@ public class Accumulation {
 	// permet d'accumuler x structures d'alignements
 	private void accAlignments() {
 		for (int i = 0; i < accu; i++) {
-			MultinomialCorpus mtcorp = new MultinomialCorpus(bi, 1);
+			MultinomialCorpus mtcorp;
+			if (i > 50)
+				mtcorp = new MultinomialCorpus(bi, 1,ibm2);
+			else
+				mtcorp = new MultinomialCorpus(bi, 1,false);
 			mtcorp.compute();
 			ArrayList<Alignement> copy = new ArrayList<Alignement>();
 			for (Alignement al : bi.getAlignements()) {
@@ -108,14 +113,19 @@ public class Accumulation {
 
 	public void compute() {
 		burnIn();
-		accAlignments();
-		maximizeFrequencies();
+		if (accu > 0){
+			accAlignments();
+			maximizeFrequencies();	
+		}
+		else
+			accAlignments = bi.getAlignements();
+			
 	}
 
 	private void burnIn() {
 		bi.reset();
 		bi.fillCooccurence();
-		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, multinomial);
+		MultinomialCorpus mtcorp = new MultinomialCorpus(bi, multinomial,false);
 		mtcorp.compute();
 		ArrayList<Alignement> copy = new ArrayList<Alignement>();
 		for (Alignement al : bi.getAlignements()) {
@@ -131,10 +141,11 @@ public class Accumulation {
 
 	// constructeur qui prend en entrée un bicorpus et le nombre d'accumulation
 	// à effectuer
-	Accumulation(BiCorpus bi, int accu, int multinomial) {
+	Accumulation(BiCorpus bi, int accu, int multinomial, boolean ibm2) {
 		this.bi = bi;
 		this.accu = accu;
 		this.multinomial = multinomial;
 		this.acc = new ArrayList<>(accu);
+		this.ibm2 = ibm2;
 	}
 }
